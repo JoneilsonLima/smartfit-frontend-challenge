@@ -10,7 +10,7 @@ export interface Location {
   schedules: Schedules[];
 }
 
-interface Schedules {
+export interface Schedules {
   weekdays: string;
   hour: string;
 }

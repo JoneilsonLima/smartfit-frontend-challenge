@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Location } from 'src/app/models/location';
+import { Location, Schedules } from 'src/app/models/location';
+import { FilterUnitsService } from 'src/app/services/filter-units.service';
 import { GetUnitsService } from 'src/app/services/get-units.service';
 
 @Component({
@@ -15,7 +16,8 @@ export class FormsComponent implements OnInit {
 
   constructor(
       private formBuilder: FormBuilder,
-      private service: GetUnitsService
+      private service: GetUnitsService,
+      private filterUnitsService: FilterUnitsService,
       ) { }
 
   ngOnInit(): void {
@@ -28,18 +30,13 @@ export class FormsComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const { showClosed } = this.formGroup.getRawValue();
-    if (!showClosed) {
-      this.filteredDataSource = this.dataSource.filter(item => item.opened === true);
-    } else {
-      this.filteredDataSource = this.dataSource;
-    }
+    const { showClosed, hour } = this.formGroup.getRawValue();
+    this.filteredDataSource = this.filterUnitsService.filter(this.dataSource, showClosed, hour);
   }
 
   private getUnitsService(): void {
     this.service.getAllunits().subscribe({
       next: (resp) => {
-
         this.dataSource = resp.locations;
         this.filteredDataSource = resp.locations;
       },
