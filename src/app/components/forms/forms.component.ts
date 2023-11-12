@@ -22,7 +22,7 @@ export class FormsComponent implements OnInit {
 
   ngOnInit(): void {
     this._buildForm();
-    this.getUnitsService();
+    this._getUnitsService();
   }
 
   onClean(): void {
@@ -32,13 +32,14 @@ export class FormsComponent implements OnInit {
   onSubmit(): void {
     const { showClosed, hour } = this.formGroup.getRawValue();
     this.filteredDataSource = this.filterUnitsService.filter(this.dataSource, showClosed, hour);
+    this.service.setFilteredUnits(this.filteredDataSource);
   }
 
-  private getUnitsService(): void {
+  private _getUnitsService(): void {
     this.service.getAllunits().subscribe({
       next: (resp) => {
-        this.dataSource = resp.locations;
-        this.filteredDataSource = resp.locations;
+        this.dataSource = resp;
+        this.filteredDataSource = resp;
       },
       error: (err) => {
         console.log(err);
