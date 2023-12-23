@@ -1,0 +1,23 @@
+import { Component, OnInit } from '@angular/core';
+import { Location } from 'src/app/models/location';
+import { GetUnitsService } from 'src/app/services/get-units.service';
+
+@Component({
+  selector: 'app-cards-list',
+  templateUrl: './cards-list.component.html',
+  styleUrls: ['./cards-list.component.scss']
+})
+export class CardsListComponent implements OnInit {
+  public unitsList: Location[] = [];
+
+  constructor(private unitService: GetUnitsService) { }
+
+  ngOnInit(): void {
+    this._getUnitsList();
+  }
+
+  private _getUnitsList(): void {
+    this.unitsList = this.unitService.getFilteredUnits();
+  }
+
+}
